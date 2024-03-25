@@ -18,7 +18,6 @@ const Page = () => {
     new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
   );
   
-  
   return <>
     <header>
       <Menu />
