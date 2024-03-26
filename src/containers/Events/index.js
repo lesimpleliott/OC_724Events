@@ -15,20 +15,24 @@ const EventList = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const filteredEvents = (
-        (!type 
-            ? data?.events 
-            : data?.events) || []
-            ).filter((event, index) => {
-            if (
-                (!type || event.type === type) &&
-                (currentPage - 1) * PER_PAGE <= index &&
-                PER_PAGE * currentPage > index
-            ) {
-                return true;
-            }
-            return false;
-        });
-    
+        (!type
+            ? data?.events
+            : data?.events.filter((cat) => {
+                  if (cat.type === type) {
+                      return true;
+                  }
+                  return false;
+              })) || []
+    ).filter((_, index) => {
+        if (
+            (currentPage - 1) * PER_PAGE <= index &&
+            PER_PAGE * currentPage > index
+        ) {
+            return true;
+        }
+        return false;
+    });
+
     const changeType = (evtType) => {
         setCurrentPage(1);
         setType(evtType);
@@ -45,11 +49,16 @@ const EventList = () => {
                     <h3 className="SelectTitle">Catégories</h3>
                     <Select
                         selection={Array.from(typeList)}
-                        onChange={(value) => (value ? changeType(value) : changeType(null))}
+                        onChange={(value) =>
+                            value ? changeType(value) : changeType(null)
+                        }
                     />
                     <div id="events" className="ListContainer">
                         {filteredEvents.map((event) => (
-                            <Modal key={event.id} Content={<ModalEvent event={event} />}>
+                            <Modal
+                                key={event.id}
+                                Content={<ModalEvent event={event} />}
+                            >
                                 {({ setIsOpened }) => (
                                     <EventCard
                                         onClick={() => setIsOpened(true)}
@@ -65,7 +74,7 @@ const EventList = () => {
                     <div className="Pagination">
                         {[...Array(pageNumber || 0)].map((_, n) => (
                             // eslint-disable-next-line react/no-array-index-key
-                            <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
+                            <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)} >
                                 {n + 1}
                             </a>
                         ))}
