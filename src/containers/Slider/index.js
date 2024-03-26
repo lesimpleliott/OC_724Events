@@ -7,7 +7,6 @@ import "./style.scss";
 const Slider = () => {
     const { data } = useData();
     const [index, setIndex] = useState(0);
-
     const byDateDesc = data?.focus.sort((evtA, evtB) =>
         new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
     );
@@ -21,12 +20,12 @@ const Slider = () => {
         if (byDateDesc) {
             nextCard();
         }
-    });
-
+    }, [byDateDesc, index]);
+    
     return (
         <div className="SlideCardList">
             {byDateDesc?.map((event, idx) => (
-                <div key={event.title}>
+                <article key={event.title}>
                     <div
                         className={`SlideCard SlideCard--${
                             index === idx ? "display" : "hide"
@@ -45,16 +44,16 @@ const Slider = () => {
                         <div className="SlideCard__pagination">
                             {byDateDesc.map((_, radioIdx) => (
                                 <input
-                                    readOnly
                                     key={`${radioIdx + 1}`}
                                     type="radio"
                                     name="radio-button"
                                     checked={index === radioIdx}
+                                    readOnly
                                 />
                             ))}
                         </div>
                     </div>
-                </div>
+                </article>
             ))}
         </div>
     );
